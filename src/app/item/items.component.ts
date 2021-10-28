@@ -23,11 +23,21 @@ export class ItemsComponent implements OnInit {
 
   saveAndDownload(): void {
     console.time('content download:');
-    this.httpClient.get('http://192.168.254.106:8887/test-10mb.pdf', { responseType: 'arraybuffer' })
+    this.httpClient.get('http://192.168.254.106:8887/test-4mb.pdf', { responseType: 'arraybuffer' })
       .subscribe((buffer) => {
         console.timeEnd('content download:');
             const folder: Folder = knownFolders.temp();
-            const filePath: string = path.join(folder.path, 'Test.pdf');
+
+
+            let androidDownloadsPath = android.os.Environment.getExternalStoragePublicDirectory(
+              android.os.Environment.DIRECTORY_DOWNLOADS
+            ).toString();
+
+            const filePath: string = path.join(androidDownloadsPath, 'Test.pdf');
+
+            console.log(androidDownloadsPath);
+            console.log(filePath);
+
             let file: File;
             try {
               file = File.fromPath(filePath);
